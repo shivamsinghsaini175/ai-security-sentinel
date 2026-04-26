@@ -1,0 +1,33 @@
+name: Build AI Security Agent
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Grant Execute Permission
+        run: chmod +x ./gradlew
+
+      - name: Build Project
+        run: ./gradlew clean build
+
+      - name: Upload JAR Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-agent
+          path: build/libs/*.jar
